@@ -204,7 +204,10 @@ public:
 		p.drawRoundedRect(outer, radius, radius);
 		const auto inset = outer.adjusted(1., 1., -1., -1.);
 		p.setPen(QPen(MacTheme::WindowEdgeInset(), 0.9));
-		p.drawRoundedRect(inset, std::max(0., radius - 1.), std::max(0., radius - 1.));
+		p.drawRoundedRect(
+			inset,
+			(radius > 1.) ? (radius - 1.) : 0.,
+			(radius > 1.) ? (radius - 1.) : 0.);
 	}
 };
 
@@ -340,7 +343,9 @@ void WindowHelper::updateCornersRounding() {
 	if (width <= 0 || height <= 0) {
 		return;
 	}
-	const auto ratio = std::max(window()->devicePixelRatio(), 1.);
+	const auto ratio = std::max<qreal>(
+		window()->devicePixelRatio(),
+		1.);
 	const auto radius = int(MacTheme::kWindowCornerRadius * ratio + 0.5);
 	auto region = CreateRoundRectRgn(
 		0,
