@@ -44,6 +44,7 @@ namespace {
 constexpr auto kDWMWCP_ROUND = DWORD(2);
 constexpr auto kDWMWCP_DONOTROUND = DWORD(1);
 constexpr auto kDWMWA_WINDOW_CORNER_PREFERENCE = DWORD(33);
+constexpr auto kDWMWA_BORDER_COLOR = DWORD(34);
 constexpr auto kDWMWA_CAPTION_COLOR = DWORD(35);
 constexpr auto kDWMWA_TEXT_COLOR = DWORD(36);
 
@@ -810,6 +811,14 @@ void WindowHelper::updateWindowFrameColors(bool active) {
 		kDWMWA_CAPTION_COLOR,
 		&bgRef,
 		sizeof(COLORREF));
+	const auto edge = MacTheme::ChromeIsDark()
+		? RGB(72, 72, 74)
+		: RGB(196, 196, 198);
+	DwmSetWindowAttribute(
+		_handle,
+		kDWMWA_BORDER_COLOR,
+		&edge,
+		sizeof(edge));
 	const auto fg = active
 		? _title->st()->fgActive->c
 		: _title->st()->fg->c;

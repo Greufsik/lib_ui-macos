@@ -42,21 +42,24 @@ namespace MacTheme {
 // Telegram branding stays until the app is renamed.
 inline constexpr wchar_t kShellName[] = L"YangeGram";
 
-// Title bar. 28pt matches a standard macOS window titlebar.
-inline constexpr int kTitleBarHeight = 28;
+// Title bar. Tall enough that the lights sit inside the rounded corner.
+inline constexpr int kTitleBarHeight = 38;
 
-// Traffic lights. Telegram for macOS places the first button at x = 20.
-// A 20pt slot with a 12pt circle needs a 16pt origin to land that circle
-// on the same x.
-inline constexpr int kTrafficLightDiameter = 12;
-inline constexpr int kTrafficLightSlot = 20;
+// Traffic lights. First circle starts 20pt from the window edge, with an
+// 8pt gap, matching the macOS reference inset. The slot is wider than the
+// circle so leftSkip + centering lands on that origin.
+inline constexpr int kTrafficLightDiameter = 13;
+inline constexpr int kTrafficLightSlot = 21;
 inline constexpr int kTrafficLightOriginX = 16;
+inline constexpr int kTrafficLightOutline = 2;
 
 inline constexpr int kCornerRadiusSmall = 6;
 inline constexpr int kCornerRadiusMedium = 10;
-inline constexpr int kCornerRadiusLarge = 14;
+inline constexpr int kCornerRadiusLarge = 12;
+inline constexpr int kWindowCornerRadius = 12;
 
-inline constexpr int kSidebarWidth = 350;
+// Icon rail from Telegram for macOS, not the wide named chat list.
+inline constexpr int kSidebarWidth = 72;
 inline constexpr int kChatRowHeight = 70;
 inline constexpr int kAvatarSize = 50;
 inline constexpr int kAvatarOrigin = 10;

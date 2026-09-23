@@ -191,13 +191,20 @@ void MacTrafficLightButton::paintEvent(QPaintEvent *e) {
 		border = MacTheme::TrafficLightPressed(border);
 	}
 
+	const auto outline = std::max(
+		1.5,
+		float64(style::ConvertScale(MacTheme::kTrafficLightOutline)) / 2.);
 	p.setPen(Qt::NoPen);
-	p.setBrush(QColor(0, 0, 0, _active ? 36 : 16));
-	p.drawEllipse(circle.translated(0, style::ConvertScale(1) / 2.));
+	p.setBrush(QColor(0, 0, 0, _active ? 50 : 24));
+	p.drawEllipse(circle.adjusted(-0.4, 0.4, 0.4, 1.2));
 
-	p.setPen(QPen(border, 1));
+	p.setPen(QPen(border, outline));
 	p.setBrush(fill);
-	p.drawEllipse(circle);
+	p.drawEllipse(circle.adjusted(
+		outline / 2.,
+		outline / 2.,
+		-outline / 2.,
+		-outline / 2.));
 
 	paintGlyph(p, circle);
 }
