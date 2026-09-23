@@ -348,32 +348,32 @@ historyScrollBgOver: #517c416b; // scroll bar background with mouse over the scr
 
 msgInBg: windowBg; // inbox message background
 msgInBgSelected: #c2dcf2; // inbox selected message background (and background of selected text in those messages)
-msgOutBg: #effdde; // outbox message background
-msgOutBgSelected: #b7dbdb; // outbox selected message background (and background of selected text in those messages)
+msgOutBg: #d6eaff; // outbox message background
+msgOutBgSelected: #c5dff8; // outbox selected message background (and background of selected text in those messages)
 msgSelectOverlay: #358cd44c; // overlay which is filling the media parts of selected messages (like in selected photo message)
 msgStickerOverlay: #358cd47f; // overlay which is filling the selected sticker message
 msgInServiceFg: windowActiveTextFg; // inbox message information text (like information about a forwarded message original sender)
 msgInServiceFgSelected: windowActiveTextFg; // inbox selected message information text (like information about a forwarded message original sender)
-msgOutServiceFg: #45a32d; // outbox message information text (like information about a forwarded message original sender)
-msgOutServiceFgSelected: #469992; // outbox message information text (like information about a forwarded message original sender)
+msgOutServiceFg: #3d7ec9; // outbox message information text (like information about a forwarded message original sender)
+msgOutServiceFgSelected: #2f6aaf; // outbox message information text (like information about a forwarded message original sender)
 msgInShadow: #748ea229; // inbox message shadow (below the bubble)
 msgInShadowSelected: #548dbb29; // inbox selected message shadow (below the bubble)
-msgOutShadow: #3ac3461d; // outbox message shadow (below the bubble)
-msgOutShadowSelected: #37a78d22; // outbox selected message shadow (below the bubble)
+msgOutShadow: #3d7ec91d; // outbox message shadow (below the bubble)
+msgOutShadowSelected: #3d7ec922; // outbox selected message shadow (below the bubble)
 msgInDateFg: #a0acb6; // inbox message time text
 msgInDateFgSelected: #6a9cc5; // inbox selected message time text
-msgOutDateFg: #6db566; // outbox message time text
-msgOutDateFgSelected: #56b2a6; // outbox selected message time text
+msgOutDateFg: #5a8ec4; // outbox message time text
+msgOutDateFgSelected: #3d7ec9; // outbox selected message time text
 msgServiceFg: windowFgActive; // service message text (like date dividers or service message about the group title being changed)
 msgServiceBg: #517c417f; // service message background (like in a service message about group title being changed) (adjusted)
 msgServiceBgSelected: #96b38ba2; // service message selected text background (like in a service message about group title being changed) (adjusted)
 msgInReplyBarColor: activeLineFg; // inbox message reply outline
 msgInReplyBarSelColor: activeLineFg; // inbox selected message reply outline
-msgOutReplyBarColor: #5eb854; // outbox message reply outline
+msgOutReplyBarColor: #4a90d9; // outbox message reply outline
 msgOutReplyBarSelColor: historyOutIconFgSelected; // outbox selected message reply outline
 msgImgReplyBarColor: msgServiceFg; // sticker message reply outline
 msgInMonoFg: #4e7391; // inbox message monospace text (like a message sent with `test` text)
-msgOutMonoFg: #459866; // outbox message monospace text
+msgOutMonoFg: #3d7ec9; // outbox message monospace text
 msgInMonoFgSelected: msgInMonoFg; // inbox message monospace text in a selected text or message
 msgOutMonoFgSelected: msgOutMonoFg; // outbox message monospace text in a selected text or message
 msgDateImgFg: msgServiceFg; // media message time text (like time text in a sent photo)
@@ -383,12 +383,12 @@ msgDateImgBgSelected: #1c4a7187; // selected media message time bubble backgroun
 
 msgFileThumbLinkInFg: lightButtonFg; // inbox media file message with thumbnail download / open with button text
 msgFileThumbLinkInFgSelected: lightButtonFgOver; // inbox selected media file message with thumbnail download / open with button text
-msgFileThumbLinkOutFg: #4ba831; // outbox media file message with thumbnail download / open with button text
+msgFileThumbLinkOutFg: #3d7ec9; // outbox media file message with thumbnail download / open with button text
 msgFileThumbLinkOutFgSelected: #31a298; // outbox selected media file message with thumbnail download / open with button text
 msgFileInBg: windowBgActive; // inbox audio file download circle background
 msgFileInBgOver: #4eade3; // inbox audio file download circle background with mouse over
 msgFileInBgSelected: #51a3d3; // inbox selected audio file download circle background
-msgFileOutBg: #5fbe67; // outbox audio file download circle background
+msgFileOutBg: #5b9adf; // outbox audio file download circle background
 msgFileOutBgSelected: #50ac9b; // outbox selected audio file download circle background
 
 msgFile1Bg: #72b1df; // blue shared links / files without image square thumbnail
