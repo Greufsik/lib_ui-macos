@@ -38,6 +38,10 @@ namespace MacTheme {
 	return st::windowBg->c.lightness() < 128;
 }
 
+// Product name drawn in the Windows window shell. The rest of the
+// Telegram branding stays until the app is renamed.
+inline constexpr wchar_t kShellName[] = L"YangeGram";
+
 // Title bar. 28pt matches a standard macOS window titlebar.
 inline constexpr int kTitleBarHeight = 28;
 

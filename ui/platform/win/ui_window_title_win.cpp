@@ -20,6 +20,7 @@
 #include "styles/palette.h"
 #include "ui/style/style_core.h"
 
+#include <QtGui/QFont>
 #include <QtGui/QPainter>
 #include <QtGui/QtEvents>
 #include <QtGui/QWindow>
@@ -168,6 +169,21 @@ void TitleWidget::paintEvent(QPaintEvent *e) {
 			st::lineWidth,
 			MacTheme::TitleBarSeparator());
 	}
+
+	p.setPen(active
+		? (MacTheme::ChromeIsDark() ? QColor(255, 255, 255) : QColor(62, 60, 62))
+		: QColor(172, 172, 172));
+	auto font = QFont(u"Segoe UI"_q);
+	font.setPixelSize(style::ConvertScale(13));
+	font.setWeight(QFont::DemiBold);
+	p.setFont(font);
+	const auto name = QString::fromWCharArray(MacTheme::kShellName);
+	const auto textWidth = p.fontMetrics().horizontalAdvance(name);
+	const auto textHeight = p.fontMetrics().height();
+	p.drawText(
+		(width() - textWidth) / 2,
+		(height() - textHeight) / 2 + p.fontMetrics().ascent(),
+		name);
 }
 
 void TitleWidget::resizeEvent(QResizeEvent *e) {
