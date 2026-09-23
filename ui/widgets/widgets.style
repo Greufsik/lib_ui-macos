@@ -1566,7 +1566,8 @@ defaultMultilineToast: Toast(defaultToast) {
 // Windows specific title
 
 windowTitleButtonWidth: 36px;
-windowTitleHeight: 24px;
+// macOS titlebar height (pt). Traffic-light metrics live in ui/macos/theme.
+windowTitleHeight: 28px;
 windowTitleButton: IconButton {
 	width: windowTitleButtonWidth;
 	height: windowTitleHeight;

@@ -145,6 +145,12 @@ PRIVATE
     ui/platform/win/ui_window_shadow_win.h
     ui/platform/win/ui_window_title_win.cpp
     ui/platform/win/ui_window_title_win.h
+    ui/macos/theme/mac_theme.h
+    ui/macos/motion/mac_motion.h
+    ui/macos/typography/mac_typography.h
+    ui/macos/icons/mac_icon_metrics.h
+    ui/macos/window/mac_traffic_lights.h
+    ui/macos/window/mac_traffic_lights.cpp
     ui/platform/win/ui_window_win.cpp
     ui/platform/win/ui_window_win.h
     ui/platform/win/ui_windows_direct_manipulation.cpp

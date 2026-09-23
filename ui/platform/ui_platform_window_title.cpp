@@ -376,10 +376,10 @@ void TitleControls::updateControlsPosition() {
 	}
 
 	std::vector<Control> visitedControls;
-	const auto updateBySide = [&](
+		const auto updateBySide = [&](
 			const std::vector<Control> &controls,
 			bool right) {
-		auto position = 0;
+		auto position = right ? 0 : _layout->leftSkip();
 		for (const auto &control : controls) {
 			const auto widget = controlWidget(control);
 			if (!widget || ranges::contains(visitedControls, control)) {

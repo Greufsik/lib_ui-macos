@@ -10,6 +10,7 @@
 #include "ui/platform/win/ui_window_title_win.h"
 #include "ui/platform/win/ui_windows_direct_manipulation.h"
 #include "ui/platform/ui_platform_utility.h"
+#include "ui/macos/theme/mac_theme.h"
 #include "ui/widgets/rp_window.h"
 #include "ui/widgets/elastic_scroll.h"
 #include "ui/qt_object_factory.h"
@@ -802,9 +803,7 @@ void WindowHelper::updateWindowFrameColors(bool active) {
 	if (!_handle || !::Platform::IsWindows11OrGreater()) {
 		return;
 	}
-	const auto bg = active
-		? _title->st()->bgActive->c
-		: _title->st()->bg->c;
+	const auto bg = MacTheme::TitleBarBackground(active);
 	COLORREF bgRef = RGB(bg.red(), bg.green(), bg.blue());
 	DwmSetWindowAttribute(
 		_handle,

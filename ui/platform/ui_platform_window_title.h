@@ -184,6 +184,12 @@ public:
 		return _variable.changes();
 	}
 
+	// Extra space before left-side controls. macOS traffic lights use this
+	// so the first circle sits at the Telegram-for-macOS origin.
+	[[nodiscard]] virtual int leftSkip() const {
+		return 0;
+	}
+
 protected:
 	TitleControlsLayout(TitleLayout layout) : _variable(layout) {}
 

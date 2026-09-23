@@ -7,6 +7,8 @@
 #include "ui/platform/win/ui_window_title_win.h"
 
 #include "ui/platform/win/ui_window_win.h"
+#include "ui/macos/theme/mac_theme.h"
+#include "ui/macos/window/mac_traffic_lights.h"
 #include "ui/widgets/buttons.h"
 #include "ui/widgets/shadow.h"
 #include "ui/widgets/rp_window.h"
@@ -16,6 +18,7 @@
 #include "base/debug_log.h"
 #include "styles/style_widgets.h"
 #include "styles/palette.h"
+#include "ui/style/style_core.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QtEvents>
@@ -42,16 +45,28 @@ HRESULT(__stdcall *GetScaleFactorForMonitor)(
 	return Result;
 }
 
+class MacTitleControlsLayout final : public TitleControlsLayout {
+public:
+	MacTitleControlsLayout()
+	: TitleControlsLayout({
+		.left = {
+			TitleControls::Control::Close,
+			TitleControls::Control::Minimize,
+			TitleControls::Control::Maximize,
+		}
+	}) {
+	}
+
+	int leftSkip() const override {
+		return MacTheme::TrafficLightOriginX();
+	}
+
+};
+
 } // namespace
 
 std::shared_ptr<TitleControlsLayout> TitleControlsLayout::Create() {
-	return std::shared_ptr<TitleControlsLayout>(new TitleControlsLayout({
-		.right = {
-			TitleControls::Control::Minimize,
-			TitleControls::Control::Maximize,
-			TitleControls::Control::Close,
-		}
-	}));
+	return std::shared_ptr<TitleControlsLayout>(new MacTitleControlsLayout());
 }
 
 struct TitleWidget::PaddingHelper {
@@ -69,13 +84,19 @@ TitleWidget::TitleWidget(not_null<RpWidget*> parent)
 	: nullptr)
 , _controls(
 	_paddingHelper ? &_paddingHelper->controlsParent : this,
-	st::defaultWindowTitle)
+	st::defaultWindowTitle,
+	CreateMacTrafficLightButtons())
 , _shadow(this, st::titleShadow) {
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
 	parent->widthValue(
 	) | rpl::on_next([=](int width) {
 		refreshGeometryWithWidth(width);
+	}, lifetime());
+
+	style::PaletteChanged(
+	) | rpl::on_next([=] {
+		update();
 	}, lifetime());
 }
 
@@ -137,9 +158,16 @@ void TitleWidget::setResizeEnabled(bool enabled) {
 
 void TitleWidget::paintEvent(QPaintEvent *e) {
 	const auto active = window()->isActiveWindow();
-	QPainter(this).fillRect(
-		e->rect(),
-		active ? _controls.st()->bgActive : _controls.st()->bg);
+	auto p = QPainter(this);
+	p.fillRect(e->rect(), MacTheme::TitleBarBackground(active));
+	if (!_shadow) {
+		p.fillRect(
+			0,
+			height() - st::lineWidth,
+			width(),
+			st::lineWidth,
+			MacTheme::TitleBarSeparator());
+	}
 }
 
 void TitleWidget::resizeEvent(QResizeEvent *e) {
