@@ -180,7 +180,7 @@ introCoverPlaneTop: #ffffff; // intro plane part
 dialogsMenuIconFg: menuIconFg; // main menu and passcode lock icon
 dialogsMenuIconFgOver: menuIconFgOver; // main menu and passcode lock icon with mouse over
 
-dialogsBg: windowBg; // chat list background
+dialogsBg: #f5f5f7; // chat list background
 dialogsNameFg: windowBoldFg; // chat list name text
 dialogsChatIconFg: dialogsNameFg; // chat list group or channel icon
 dialogsDateFg: windowSubTextFg; // chat list date text
@@ -198,7 +198,7 @@ dialogsArchiveFg: #525252 | dialogsNameFg; // chat list archive name text
 dialogsOnlineBadgeFg: #4dc920 | dialogsUnreadBg; // chat list online status
 dialogsScamFg: dialogsDraftFg; // chat list scam label
 
-dialogsBgOver: windowBgOver; // chat list background with mouse over
+dialogsBgOver: #eaeaef; // chat list background with mouse over
 dialogsNameFgOver: windowBoldFgOver; // chat list name text with mouse over
 dialogsChatIconFgOver: dialogsNameFgOver; // chat list group or channel icon with mouse over
 dialogsDateFgOver: windowSubTextFgOver; // chat list date text with mouse over

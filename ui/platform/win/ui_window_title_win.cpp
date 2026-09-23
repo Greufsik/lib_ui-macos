@@ -161,14 +161,6 @@ void TitleWidget::paintEvent(QPaintEvent *e) {
 	const auto active = window()->isActiveWindow();
 	auto p = QPainter(this);
 	p.fillRect(e->rect(), MacTheme::TitleBarBackground(active));
-	if (!_shadow) {
-		p.fillRect(
-			0,
-			height() - st::lineWidth,
-			width(),
-			st::lineWidth,
-			MacTheme::TitleBarSeparator());
-	}
 
 	p.setPen(active
 		? (MacTheme::ChromeIsDark() ? QColor(255, 255, 255) : QColor(62, 60, 62))

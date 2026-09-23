@@ -100,11 +100,11 @@ inline constexpr int kChatHeaderHeight = 52;
 }
 
 [[nodiscard]] inline QColor TitleBarBackground(bool active) {
-	const auto dark = ChromeIsDark();
-	if (dark) {
-		return active ? QColor(28, 28, 30) : QColor(36, 36, 38);
+	const auto bg = st::windowBg->c;
+	if (active) {
+		return bg;
 	}
-	return active ? QColor(246, 246, 246) : QColor(236, 236, 236);
+	return ChromeIsDark() ? bg.lighter(112) : bg.darker(104);
 }
 
 [[nodiscard]] inline QColor TitleBarSeparator() {
