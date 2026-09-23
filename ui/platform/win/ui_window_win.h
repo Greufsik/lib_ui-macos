@@ -75,6 +75,7 @@ private:
 
 	const not_null<TitleWidget*> _title;
 	const not_null<RpWidget*> _body;
+	const not_null<RpWidget*> _edge;
 	rpl::event_stream<not_null<HitTestRequest*>> _hitTestRequests;
 	rpl::event_stream<HitTestResult> _systemButtonOver;
 	rpl::event_stream<HitTestResult> _systemButtonDown;

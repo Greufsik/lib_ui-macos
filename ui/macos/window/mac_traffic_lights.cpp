@@ -192,12 +192,8 @@ void MacTrafficLightButton::paintEvent(QPaintEvent *e) {
 	}
 
 	const auto outline = std::max(
-		1.5,
-		float64(style::ConvertScale(MacTheme::kTrafficLightOutline)) / 2.);
-	p.setPen(Qt::NoPen);
-	p.setBrush(QColor(0, 0, 0, _active ? 50 : 24));
-	p.drawEllipse(circle.adjusted(-0.4, 0.4, 0.4, 1.2));
-
+		1.,
+		float64(style::ConvertScale(MacTheme::kTrafficLightOutline)));
 	p.setPen(QPen(border, outline));
 	p.setBrush(fill);
 	p.drawEllipse(circle.adjusted(

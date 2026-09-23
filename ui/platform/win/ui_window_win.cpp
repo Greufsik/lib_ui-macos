@@ -25,6 +25,7 @@
 #include "styles/style_widgets.h"
 
 #include <QtCore/QPoint>
+#include <QtGui/QPainter>
 #include <QtGui/QWindow>
 #include <QtWidgets/QStyleFactory>
 #include <QtWidgets/QApplication>
@@ -180,11 +181,39 @@ void FixAeroSnap(HWND handle) {
 
 } // namespace
 
+class WindowEdge final : public RpWidget {
+public:
+	explicit WindowEdge(QWidget *parent) : RpWidget(parent) {
+		setAttribute(Qt::WA_TransparentForMouseEvents);
+		setAttribute(Qt::WA_NoSystemBackground);
+		setAttribute(Qt::WA_TranslucentBackground);
+	}
+
+	void paintEvent(QPaintEvent *e) override {
+		if (window()->isMaximized() || window()->isFullScreen()) {
+			return;
+		}
+		auto p = QPainter(this);
+		p.setRenderHint(QPainter::Antialiasing);
+		p.setBrush(Qt::NoBrush);
+		const auto radius = float64(MacTheme::Px(MacTheme::kWindowCornerRadius));
+		const auto outer = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
+		p.setPen(QPen(
+			MacTheme::WindowEdgeOuter(window()->isActiveWindow()),
+			1.));
+		p.drawRoundedRect(outer, radius, radius);
+		const auto inset = outer.adjusted(1., 1., -1., -1.);
+		p.setPen(QPen(MacTheme::WindowEdgeInset(), 0.9));
+		p.drawRoundedRect(inset, std::max(0., radius - 1.), std::max(0., radius - 1.));
+	}
+};
+
 WindowHelper::WindowHelper(not_null<RpWidget*> window)
 : BasicWindowHelper(window)
 , NativeEventFilter(window)
 , _title(Ui::CreateChild<TitleWidget>(window.get()))
-, _body(Ui::CreateChild<RpWidget>(window.get())) {
+, _body(Ui::CreateChild<RpWidget>(window.get()))
+, _edge(Ui::CreateChild<WindowEdge>(window.get())) {
 	if (!::Platform::IsWindows8OrGreater()) {
 		window->setWindowFlag(Qt::FramelessWindowHint);
 	}
@@ -284,17 +313,43 @@ void WindowHelper::updateShadow() {
 }
 
 void WindowHelper::updateCornersRounding() {
-	if (!_handle || !::Platform::IsWindows11OrGreater()) {
+	if (!_handle) {
 		return;
 	}
-	const auto preference = (_isFullScreen || _isMaximizedAndTranslucent)
-		? kDWMWCP_DONOTROUND
-		: kDWMWCP_ROUND;
-	DwmSetWindowAttribute(
-		_handle,
-		kDWMWA_WINDOW_CORNER_PREFERENCE,
-		&preference,
-		sizeof(preference));
+	const auto square = _isFullScreen
+		|| _isMaximizedAndTranslucent
+		|| window()->isMaximized();
+	if (::Platform::IsWindows11OrGreater()) {
+		const auto preference = square ? kDWMWCP_DONOTROUND : kDWMWCP_ROUND;
+		DwmSetWindowAttribute(
+			_handle,
+			kDWMWA_WINDOW_CORNER_PREFERENCE,
+			&preference,
+			sizeof(preference));
+	}
+	if (square || _title->isHidden()) {
+		SetWindowRgn(_handle, nullptr, TRUE);
+		return;
+	}
+	RECT rect{};
+	if (!GetWindowRect(_handle, &rect)) {
+		return;
+	}
+	const auto width = int(rect.right - rect.left);
+	const auto height = int(rect.bottom - rect.top);
+	if (width <= 0 || height <= 0) {
+		return;
+	}
+	const auto ratio = std::max(window()->devicePixelRatio(), 1.);
+	const auto radius = int(MacTheme::kWindowCornerRadius * ratio + 0.5);
+	auto region = CreateRoundRectRgn(
+		0,
+		0,
+		width + 1,
+		height + 1,
+		radius * 2,
+		radius * 2);
+	SetWindowRgn(_handle, region, TRUE);
 }
 
 void WindowHelper::setMinimumSize(QSize size) {
@@ -406,6 +461,10 @@ void WindowHelper::init() {
 			titleShown ? titleHeight : 0,
 			size.width(),
 			size.height() - (titleShown ? titleHeight : 0));
+		_edge->setGeometry(0, 0, size.width(), size.height());
+		_edge->setVisible(titleShown);
+		_edge->raise();
+		updateCornersRounding();
 	}, _body->lifetime());
 
 	_dpi.value() | rpl::on_next([=](uint dpi) {
@@ -812,8 +871,8 @@ void WindowHelper::updateWindowFrameColors(bool active) {
 		&bgRef,
 		sizeof(COLORREF));
 	const auto edge = MacTheme::ChromeIsDark()
-		? RGB(72, 72, 74)
-		: RGB(196, 196, 198);
+		? (active ? RGB(214, 214, 218) : RGB(140, 140, 144))
+		: (active ? RGB(188, 188, 192) : RGB(210, 210, 214));
 	DwmSetWindowAttribute(
 		_handle,
 		kDWMWA_BORDER_COLOR,
@@ -828,6 +887,7 @@ void WindowHelper::updateWindowFrameColors(bool active) {
 		kDWMWA_TEXT_COLOR,
 		&fgRef,
 		sizeof(COLORREF));
+	_edge->update();
 }
 
 void WindowHelper::updateCloaking() {

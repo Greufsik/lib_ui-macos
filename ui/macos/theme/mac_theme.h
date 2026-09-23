@@ -42,16 +42,17 @@ namespace MacTheme {
 // Telegram branding stays until the app is renamed.
 inline constexpr wchar_t kShellName[] = L"YangeGram";
 
-// Title bar. Tall enough that the lights sit inside the rounded corner.
-inline constexpr int kTitleBarHeight = 38;
+// Shell bar from puruvj/macos-web Window.svelte.
+// Lights sit at top/left 1rem, so a 2.8rem bar centers a 0.8rem circle
+// 1rem in from the corner. Corner radius is 0.75rem.
+inline constexpr int kTitleBarHeight = 45;
 
-// Traffic lights. First circle starts 20pt from the window edge, with an
-// 8pt gap, matching the macOS reference inset. The slot is wider than the
-// circle so leftSkip + centering lands on that origin.
+// 0.8rem circles, 0.6rem gap. leftSkip is the slot origin; centering the
+// circle in the slot lands its left edge on 1rem.
 inline constexpr int kTrafficLightDiameter = 13;
-inline constexpr int kTrafficLightSlot = 21;
-inline constexpr int kTrafficLightOriginX = 16;
-inline constexpr int kTrafficLightOutline = 2;
+inline constexpr int kTrafficLightSlot = 23;
+inline constexpr int kTrafficLightOriginX = 11;
+inline constexpr int kTrafficLightOutline = 1;
 
 inline constexpr int kCornerRadiusSmall = 6;
 inline constexpr int kCornerRadiusMedium = 10;
@@ -112,6 +113,18 @@ inline constexpr int kChatHeaderHeight = 52;
 		: QColor(0, 0, 0, 28);
 }
 
+// macos-web dark window edge: 1px light ring at 50% plus a 0.9px inset.
+[[nodiscard]] inline QColor WindowEdgeOuter(bool active) {
+	if (ChromeIsDark()) {
+		return QColor(255, 255, 255, active ? 128 : 72);
+	}
+	return QColor(0, 0, 0, active ? 48 : 28);
+}
+
+[[nodiscard]] inline QColor WindowEdgeInset() {
+	return ChromeIsDark() ? QColor(0, 0, 0, 77) : QColor(255, 255, 255, 90);
+}
+
 [[nodiscard]] inline QColor SidebarBackground() {
 	return ChromeIsDark() ? QColor(28, 28, 30) : QColor(255, 255, 255);
 }
@@ -126,22 +139,22 @@ enum class TrafficLight {
 	switch (light) {
 	case TrafficLight::Close: return QColor(255, 95, 86);
 	case TrafficLight::Minimize: return QColor(255, 189, 46);
-	case TrafficLight::Zoom: return QColor(40, 200, 64);
+	case TrafficLight::Zoom: return QColor(0x27, 0xC9, 0x3F);
 	}
 	Unexpected("Traffic light in MacTheme::TrafficLightFill.");
 }
 
 [[nodiscard]] inline QColor TrafficLightBorder(TrafficLight light) {
 	switch (light) {
-	case TrafficLight::Close: return QColor(226, 70, 64);
-	case TrafficLight::Minimize: return QColor(224, 161, 0);
-	case TrafficLight::Zoom: return QColor(26, 171, 46);
+	case TrafficLight::Close: return QColor(0xE0, 0x44, 0x3E);
+	case TrafficLight::Minimize: return QColor(0xDE, 0xA1, 0x23);
+	case TrafficLight::Zoom: return QColor(0x1A, 0xAB, 0x29);
 	}
 	Unexpected("Traffic light in MacTheme::TrafficLightBorder.");
 }
 
 [[nodiscard]] inline QColor TrafficLightInactiveFill() {
-	return ChromeIsDark() ? QColor(68, 68, 70) : QColor(220, 220, 220);
+	return QColor(0xB6, 0xB6, 0xB7);
 }
 
 [[nodiscard]] inline QColor TrafficLightInactiveBorder() {
