@@ -9,6 +9,7 @@
 #include "ui/effects/ripple_animation.h"
 #include "ui/painter.h"
 
+#include <QtGui/QPainterPath>
 #include <QtGui/QtEvents>
 
 namespace Ui::Menu {
@@ -95,13 +96,34 @@ void Action::paintEvent(QPaintEvent *e) {
 	paint(p);
 }
 
-void Action::paintBackground(QPainter &p, bool selected) {
-	if (selected && _st.itemBgOver->c.alpha() < 255) {
-		p.fillRect(0, 0, width(), _height, _st.itemBg);
+void PaintMenuItemBg(
+		QPainter &p,
+		const style::Menu &st,
+		int width,
+		int height,
+		bool selected) {
+	const auto skip = st.itemOverSkip;
+	if (!selected || skip <= 0 || width <= skip * 2) {
+		p.fillRect(
+			QRect(0, 0, width, height),
+			selected ? st.itemBgOver : st.itemBg);
+		return;
 	}
-	p.fillRect(
-		QRect(0, 0, width(), _height),
-		selected ? _st.itemBgOver : _st.itemBg);
+	p.fillRect(0, 0, width, height, st.itemBg);
+	auto hq = PainterHighQualityEnabler(p);
+	p.setPen(Qt::NoPen);
+	p.setBrush(st.itemBgOver);
+	p.drawRoundedRect(
+		skip,
+		0,
+		width - skip * 2,
+		height,
+		st.itemOverRadius,
+		st.itemOverRadius);
+}
+
+void Action::paintBackground(QPainter &p, bool selected) {
+	PaintMenuItemBg(p, _st, width(), _height, selected);
 }
 
 void Action::paintText(Painter &p) {
@@ -118,7 +140,23 @@ void Action::paint(Painter &p) {
 	const auto selected = isSelected();
 	paintBackground(p, selected);
 	if (enabled) {
-		RippleButton::paintRipple(p, 0, 0);
+		const auto skip = _st.itemOverSkip;
+		if (selected && skip > 0 && width() > skip * 2) {
+			p.save();
+			auto path = QPainterPath();
+			path.addRoundedRect(
+				skip,
+				0,
+				width() - skip * 2,
+				_height,
+				_st.itemOverRadius,
+				_st.itemOverRadius);
+			p.setClipPath(path);
+			RippleButton::paintRipple(p, 0, 0);
+			p.restore();
+		} else {
+			RippleButton::paintRipple(p, 0, 0);
+		}
 	}
 	if (const auto icon = (selected ? _iconOver : _icon)) {
 		icon->paint(p, _st.itemIconPosition, width());

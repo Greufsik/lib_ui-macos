@@ -249,6 +249,8 @@ Menu {
 	itemFgShortcutOver: color;
 	itemFgShortcutDisabled: color;
 	itemPadding: margins;
+	itemOverSkip: pixels;
+	itemOverRadius: pixels;
 	itemRightSkip: pixels;
 	itemIconPosition: point;
 	itemStyle: TextStyle;
@@ -949,7 +951,7 @@ defaultMenuToggleOver: Toggle(defaultToggle) {
 	untoggledFg: menuIconFgOver;
 }
 defaultMenuSeparator: MenuSeparator {
-	padding: margins(0px, 5px, 0px, 5px);
+	padding: margins(15px, 2px, 15px, 2px);
 	width: 1px;
 	fg: menuSeparatorFg;
 }
@@ -965,7 +967,9 @@ defaultMenu: Menu {
 	itemFgShortcutOver: windowSubTextFgOver;
 	itemFgShortcutDisabled: menuFgDisabled;
 	itemIconPosition: point(0px, 0px);
-	itemPadding: margins(17px, 8px, 17px, 7px);
+	itemPadding: margins(15px, 6px, 15px, 6px);
+	itemOverSkip: 4px;
+	itemOverRadius: 5px;
 	itemRightSkip: 6px;
 	itemStyle: defaultTextStyle;
 	itemToggle: defaultMenuToggle;
@@ -1693,8 +1697,8 @@ menuIconAttentionColor: attentionButtonFg;
 menuIconSubmenuArrow: defaultMenuArrow;
 
 menuWithIcons: Menu(defaultMenu) {
-	itemIconPosition: point(15px, 5px);
-	itemPadding: margins(54px, 8px, 17px, 8px);
+	itemIconPosition: point(15px, 4px);
+	itemPadding: margins(48px, 6px, 15px, 6px);
 
 	arrow: menuIconSubmenuArrow;
 }

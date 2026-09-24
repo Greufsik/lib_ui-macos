@@ -11,8 +11,16 @@
 #include "styles/style_widgets.h"
 
 class Painter;
+class QPainter;
 
 namespace Ui::Menu {
+
+void PaintMenuItemBg(
+	QPainter &p,
+	const style::Menu &st,
+	int width,
+	int height,
+	bool selected);
 
 class Action : public ItemBase {
 public:

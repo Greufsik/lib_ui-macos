@@ -6,8 +6,12 @@
 //
 #include "ui/widgets/menu/menu_multiline_action.h"
 
+#include "ui/painter.h"
 #include "ui/widgets/labels.h"
+#include "ui/widgets/menu/menu_action.h"
 #include "ui/qt_object_factory.h"
+
+#include <QtGui/QPainterPath>
 
 namespace Ui::Menu {
 
@@ -82,8 +86,24 @@ int MultilineAction::contentHeight() const {
 void MultilineAction::paintEvent(QPaintEvent *e) {
 	auto p = QPainter(this);
 	const auto selected = isSelected();
-	p.fillRect(rect(), selected ? _st.itemBgOver : _st.itemBg);
-	RippleButton::paintRipple(p, 0, 0);
+	PaintMenuItemBg(p, _st, width(), height(), selected);
+	const auto skip = _st.itemOverSkip;
+	if (selected && skip > 0 && width() > skip * 2) {
+		p.save();
+		auto path = QPainterPath();
+		path.addRoundedRect(
+			skip,
+			0,
+			width() - skip * 2,
+			height(),
+			_st.itemOverRadius,
+			_st.itemOverRadius);
+		p.setClipPath(path);
+		RippleButton::paintRipple(p, 0, 0);
+		p.restore();
+	} else {
+		RippleButton::paintRipple(p, 0, 0);
+	}
 	if (const auto icon = (selected ? _iconOver : _icon)) {
 		icon->paint(p, _st.itemIconPosition, width());
 	}
